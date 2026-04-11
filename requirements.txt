@@ -12,6 +12,8 @@ chromadb
 pypdf
 beautifulsoup4
 playwright
+langchain_community
+wikipedia
 
 # pip install -r requirements.txt
 # playwright install

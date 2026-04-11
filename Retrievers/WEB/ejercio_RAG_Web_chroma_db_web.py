@@ -3,31 +3,25 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
+from langchain_community.document_loaders import WikipediaLoader
+from langchain_community.document_loaders import WebBaseLoader
 
-# file_path = "./ficheros/recetario_canario.pdf"
-# loader = PyPDFLoader(file_path)
+CHROMA_DIR = "./chroma_db_web"
 
+COLLECTION_NAME = "3djuegos"
+COLLECTION_NAME2 = "vandal.elespanol"
+COLLECTION_NAME3 = "hobbyconsolas"
+COLLECTION_NAME4 = "eurogamer"
 
-# docs = loader.load()
-# docs[0]
-
-
-# import pprint
-
-# pprint.pp(docs[0].metadata)
-
-
-CHROMA_DIR = "./chroma_db_pdf"
-COLLECTION_NAME = "recetario_canario"
-COLLECTION_NAME2 = "vegano_sin_indice"
+# https://www.3djuegos.com/
+# https://vandal.elespanol.com/
+# https://www.hobbyconsolas.com/
+# https://www.eurogamer.es/
 
 
-
-def cargar_documentos(fichero):
-    loader= PyPDFLoader(fichero)
-    documentos=loader.load()
-    
-    return documentos
+def cargar_documentos(titulo):
+    docs = WebBaseLoader(query=titulo, load_max_docs=2).load()
+    return docs
 
 
 def partir_documentos(documentos):
@@ -56,7 +50,7 @@ def crear_embeddings():
 Añadimos los embeddings a Chroma
 
 """
-def crear_vectorstore(embeddings,chunks = None,):
+def crear_vectorstore(embeddings,chunks = None,collection_name_db = None):
     """
     Si la colección ya existe en disco, la reutiliza.
     Si no existe, indexa los documentos.
@@ -68,7 +62,7 @@ def crear_vectorstore(embeddings,chunks = None,):
         documents=chunks,
         embedding=embeddings,
         persist_directory=CHROMA_DIR,
-        collection_name=COLLECTION_NAME
+        collection_name=collection_name_db
     )
 
     num_docs = vectorstore._collection.count()
@@ -84,14 +78,33 @@ def crear_vectorstore(embeddings,chunks = None,):
 
 
 
-file_path = "./ficheros/recetario_canario.pdf"
-documento1=cargar_documentos(file_path)
+titulo = "https://www.3djuegos.com/"
+documento1=cargar_documentos(titulo)
 documento1_cortado=partir_documentos(documento1)
+embeddings = crear_embeddings()
+crear_vectorstore(embeddings, documento1_cortado,COLLECTION_NAME)
 
 
-file_path = "./ficheros/vegano_sin_indice.pdf"
-documento2=cargar_documentos(file_path)
-documento2_cortado=partir_documentos(documento1)
+titulo2 = "https://vandal.elespanol.com/"
+documento2=cargar_documentos(titulo2)
+documento2_cortado=partir_documentos(documento2)
+embeddings = crear_embeddings()
+crear_vectorstore(embeddings, documento2_cortado,COLLECTION_NAME2)
+
+titulo3 = "https://vandal.elespanol.com/"
+documento3=cargar_documentos(titulo3)
+documento3_cortado=partir_documentos(documento3)
+embeddings = crear_embeddings()
+crear_vectorstore(embeddings, documento3_cortado,COLLECTION_NAME3)
+
+
+titulo4 = "https://www.eurogamer.es/"
+documento4=cargar_documentos(titulo4)
+documento4_cortado=partir_documentos(documento4)
+embeddings = crear_embeddings()
+crear_vectorstore(embeddings, documento4_cortado,COLLECTION_NAME4)
+
+
 
 
 
