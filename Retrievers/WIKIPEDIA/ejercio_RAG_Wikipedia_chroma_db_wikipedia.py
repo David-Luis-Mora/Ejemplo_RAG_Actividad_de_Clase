@@ -6,8 +6,8 @@ from langchain_chroma import Chroma
 from langchain_community.document_loaders import WikipediaLoader
 
 CHROMA_DIR = "./chroma_db_wikipedia"
-COLLECTION_NAME = "Jujutsu Kaisen"
-COLLECTION_NAME2 = "Kimetsu no Yaiba"
+COLLECTION_NAME = "Jujutsu_Kaisen"
+COLLECTION_NAME2 = "Kimetsu_no_Yaiba"
 
 
 
@@ -20,7 +20,7 @@ def cargar_documentos(titulo):
 def partir_documentos(documentos):
     spiltter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
-        chunck_overlaop=200
+        chunk_overlap=200
     )
     chunks = spiltter.split_documents(documentos)
     return chunks

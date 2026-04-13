@@ -16,7 +16,9 @@ COLLECTION_NAME = "Jujutsu Kaisen"
 COLLECTION_NAME2 = "Kimetsu no Yaiba"
 
 
-LLM_MODEL = "gemma4:e2b"  
+LLM_MODEL = ChatOllama(
+    model="gemma4:e2b",
+)
 
 
 config = {
@@ -89,7 +91,7 @@ def obtener_datos_del_anime(promp_usuario):
    
 
 agente = create_agent(
-    model=modelo,
+    model=LLM_MODEL,
     tools=[obtener_datos_del_anime],
     system_prompt=PROMPT_SISTEMA,
 )

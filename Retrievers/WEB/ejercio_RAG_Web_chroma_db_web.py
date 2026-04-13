@@ -20,14 +20,14 @@ COLLECTION_NAME4 = "eurogamer"
 
 
 def cargar_documentos(titulo):
-    docs = WebBaseLoader(query=titulo, load_max_docs=2).load()
+    docs = WebBaseLoader(titulo).load()
     return docs
 
 
 def partir_documentos(documentos):
     spiltter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
-        chunck_overlaop=200
+        chunk_overlap=200
     )
     chunks = spiltter.split_documents(documentos)
     return chunks
