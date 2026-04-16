@@ -12,10 +12,9 @@ chromadb
 pypdf
 beautifulsoup4
 playwright
-langchain_community
-wikipedia
-arxiv
-pymupdf
+
+# esto es para el ejercicio del MCP
+langchain_mcp_adapters
 
 # pip install -r requirements.txt
 # playwright install

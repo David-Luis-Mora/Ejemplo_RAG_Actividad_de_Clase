@@ -43,7 +43,9 @@ def main():
 
     resultados = collection.query(
         query_texts=[consulta],
-        n_results=3
+        n_results=3,
+        include=["uris", "metadatas", "distances"]
+
     )
 
     uris = resultados.get("uris", [[]])[0]
@@ -74,3 +76,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+    
