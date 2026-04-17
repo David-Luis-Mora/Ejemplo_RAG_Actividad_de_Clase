@@ -44,7 +44,7 @@ async def main():
 
     client = MultiServerMCPClient(
         {
-            "tiempo":{
+            "airbnb":{
                 "transport":"stdio",
                 "command": "npx",
                 "args": ["-y",

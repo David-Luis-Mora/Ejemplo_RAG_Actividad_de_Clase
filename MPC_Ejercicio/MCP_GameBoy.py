@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 load_dotenv()
 rom_path = os.getenv("ROM_PATH")
 port = os.getenv("PORT", "3001")
-
+# http://localhost:3001/emulator
 
 
 # Esta función pinta de forma bonita las herramientas que se descargan de un mcp
@@ -55,6 +55,9 @@ async def main():
             "GameBoy":{
                 "transport":"sse",
                 "url": "http://localhost:3001/mcp",
+                # "env":{
+                #     "PORT":3001
+                # }
             }
         }
     )
