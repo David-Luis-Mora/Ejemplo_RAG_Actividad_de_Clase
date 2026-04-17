@@ -57,20 +57,20 @@ async def main():
     #     pretty_tool(tool)
 
     # Función para ejecutar herramientas de Airbnb y guardar resultado
-    async def run_airbnb_tool(tool_name, args):
-        tool = next((t for t in tools if t.name == tool_name and "airbnb" in t.name.lower()), None)
-        if not tool:
-            return f"No encontré la herramienta {tool_name} en Airbnb."
+    # async def run_airbnb_tool(tool_name, args):
+    #     tool = next((t for t in tools if t.name == tool_name and "airbnb" in t.name.lower()), None)
+    #     if not tool:
+    #         return f"No encontré la herramienta {tool_name} en Airbnb."
 
-        result = await tool.run(args)
+    #     result = await tool.run(args)
 
-        # Guardamos en un txt
-        with open("airbnb_results.txt", "a", encoding="utf-8") as f:
-            f.write(f"\n--- Resultado {tool_name} ---\n")
-            f.write(json.dumps(result, indent=2, ensure_ascii=False))
-            f.write("\n---------------------------\n")
+    #     # Guardamos en un txt
+    #     with open("airbnb_results.txt", "a", encoding="utf-8") as f:
+    #         f.write(f"\n--- Resultado {tool_name} ---\n")
+    #         f.write(json.dumps(result, indent=2, ensure_ascii=False))
+    #         f.write("\n---------------------------\n")
 
-        return result
+    #     return result
 
     # Crear agente LangChain
     agente = create_agent(
@@ -82,11 +82,22 @@ async def main():
         ),
         tools=tools,
         system_prompt=(
-            "Eres un asistente que llama a herramientas. "
-            "Devuelve la salida en español si la tool devuelve la información en inglés."
-            "Cuando usas la herramientas de AirBNB solo seleciona los nombre de la casa, precio y fecha que pueda selecionar"
-            "Solo las 5 mejores opciones y devuelvelo en lenguaje natural al usuario"
-            "Cuando el usuario te diga de reservar usa la herramienta para general un archivo con extension de txt y guarda dentro del archivo los dato de la reserva"
+    "Eres un asistente experto que llama a herramientas. Tienes acceso a dos MCP: Airbnb y un MCP local de archivos.\n\n"
+    "Reglas de comportamiento:\n"
+    "1. Cuando el usuario mencione 'Airbnb':\n"
+    "   - Usa únicamente las herramientas del MCP de Airbnb.\n"
+    "   - Devuelve solo la información más relevante: nombre de la propiedad, precio y fechas disponibles.\n"
+    "   - Muestra solo las 5 mejores opciones.\n"
+    "   - Explica la información en lenguaje natural en español.\n"
+    "2. Si el usuario indica que quiere hacer una reserva:\n"
+    "   - Usa la herramienta correspondiente para guardar los datos en un archivo .txt.\n"
+    "   - El archivo se llamará info_airbnb.txt.\n"
+    "   - Dentro del archivo guarda: nombre de la propiedad, precio, fechas y cualquier detalle adicional de la reserva.\n"
+    "   - Confirma al usuario que la reserva se ha guardado.\n"
+    "3. Para cualquier otra consulta que no sea de Airbnb, usa las herramientas del MCP local normalmente.\n"
+    "4. Siempre responde en español y no preguntes nuevamente por qué herramienta usar.\n"
+    "5. Si la información del MCP excede el contexto, resume los datos para mostrar solo lo esencial."
+    "Guadar la informacion en la carpeta llamado airbnb"
             
         )
     )
@@ -97,9 +108,9 @@ async def main():
         if "airbnb" in prompt.lower():
             # Por ejemplo, si el usuario pide buscar listados
             # Ajusta la herramienta y los argumentos según tu MCP de Airbnb
-            resultado = await run_airbnb_tool("search_listing", {"location": "Madrid"})
-            print("\n=== Airbnb Resultado ===")
-            print(resultado)
+            # resultado = await run_airbnb_tool("search_listing", {"location": "Madrid"})
+            # print("\n=== Airbnb Resultado ===")
+            # print(resultado)
             continue
 
         # Si no es Airbnb, pasar al agente normal
